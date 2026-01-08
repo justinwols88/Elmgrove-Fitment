@@ -1,47 +1,8 @@
-// Add this to your existing app.js file
-
-// Function to save fitment data to Firebase
-function saveFitment() {
-    const year = document.getElementById('year').value;
-    const make = document.getElementById('make').value;
-    const model = document.getElementById('model').value;
-    const vehicle = `${year} ${make} ${model}`;
-    
-    const fitmentData = {
-        vehicle: vehicle,
-        tireSize: document.getElementById('primary-size').textContent,
-        year: year,
-        make: make,
-        model: model,
-        specifications: {
-            width: document.getElementById('tire-width').textContent,
-            aspectRatio: document.getElementById('aspect-ratio').textContent,
-            rimDiameter: document.getElementById('rim-diameter').textContent,
-            rimWidth: document.getElementById('rim-width').textContent,
-            boltPattern: document.getElementById('bolt-pattern').textContent,
-            offset: document.getElementById('offset').textContent,
-            loadIndex: document.getElementById('load-index').textContent,
-            speedRating: document.getElementById('speed-rating').textContent,
-            pressureFront: document.getElementById('pressure-front').textContent,
-            pressureRear: document.getElementById('pressure-rear').textContent
-        }
-    };
-    
-    // Set the current fitment data for Firebase
-    if (typeof setCurrentFitmentData === 'function') {
-        setCurrentFitmentData(fitmentData);
-    }
-    
-    // Call Firebase save function
-    if (typeof saveFitmentToFirebase === 'function') {
-        saveFitmentToFirebase();
-    }
-}
 // RapidAPI Configuration for Car Stockpile API
 const RAPIDAPI_KEY = 'c72277caa5mshd73fd7f2cd60c02p159ca4jsnc5a89a41bf4d';
 const RAPIDAPI_HOST = 'car-stockpile.p.rapidapi.com';
 
-// Comprehensive local tire database
+// Enhanced local tire database for fallback
 const tireDatabase = {
     "Audi": {
         "A3": { tireSize: "225/45R17", rimDiameter: 17, boltPattern: "5x112", offset: "+45mm" },
@@ -110,76 +71,6 @@ const tireDatabase = {
         "Traverse": { tireSize: "255/55R20", rimDiameter: 20, boltPattern: "5x115", offset: "+22mm" },
         "Malibu": { tireSize: "225/55R17", rimDiameter: 17, boltPattern: "5x115", offset: "+44mm" },
         "Corvette": { tireSize: "305/30R19", rimDiameter: 19, boltPattern: "5x120", offset: "+45mm" }
-    },
-    "Nissan": {
-        "Altima": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+50mm" },
-        "Rogue": { tireSize: "235/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+45mm" },
-        "Sentra": { tireSize: "205/55R16", rimDiameter: 16, boltPattern: "5x114.3", offset: "+45mm" },
-        "Pathfinder": { tireSize: "255/60R18", rimDiameter: 18, boltPattern: "6x114.3", offset: "+40mm" },
-        "Frontier": { tireSize: "265/65R18", rimDiameter: 18, boltPattern: "6x114.3", offset: "+25mm" },
-        "Titan": { tireSize: "275/65R18", rimDiameter: 18, boltPattern: "8x165", offset: "+30mm" },
-        "Armada": { tireSize: "275/60R20", rimDiameter: 20, boltPattern: "8x165", offset: "+30mm" }
-    },
-    "Hyundai": {
-        "Elantra": { tireSize: "225/45R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+50mm" },
-        "Sonata": { tireSize: "225/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+48mm" },
-        "Tucson": { tireSize: "235/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+45mm" },
-        "Santa Fe": { tireSize: "235/65R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+42mm" },
-        "Palisade": { tireSize: "245/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+40mm" }
-    },
-    "Kia": {
-        "Forte": { tireSize: "205/55R16", rimDiameter: 16, boltPattern: "5x114.3", offset: "+48mm" },
-        "Soul": { tireSize: "205/60R16", rimDiameter: 16, boltPattern: "5x114.3", offset: "+45mm" },
-        "Seltos": { tireSize: "215/60R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+42mm" },
-        "Sportage": { tireSize: "235/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+40mm" },
-        "Sorento": { tireSize: "235/65R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+38mm" },
-        "Telluride": { tireSize: "245/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+35mm" }
-    },
-    "Subaru": {
-        "Outback": { tireSize: "225/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+55mm" },
-        "Forester": { tireSize: "225/55R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+48mm" },
-        "Crosstrek": { tireSize: "225/55R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+48mm" },
-        "Ascent": { tireSize: "245/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+50mm" },
-        "WRX": { tireSize: "245/40R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+55mm" },
-        "BRZ": { tireSize: "215/45R17", rimDiameter: 17, boltPattern: "5x100", offset: "+48mm" }
-    },
-    "Jeep": {
-        "Wrangler": { tireSize: "285/70R17", rimDiameter: 17, boltPattern: "5x127", offset: "+44mm" },
-        "Grand Cherokee": { tireSize: "265/60R18", rimDiameter: 18, boltPattern: "5x127", offset: "+34mm" },
-        "Cherokee": { tireSize: "225/60R18", rimDiameter: 18, boltPattern: "5x110", offset: "+38mm" },
-        "Compass": { tireSize: "225/60R17", rimDiameter: 17, boltPattern: "5x110", offset: "+40mm" },
-        "Renegade": { tireSize: "215/60R17", rimDiameter: 17, boltPattern: "5x110", offset: "+42mm" },
-        "Gladiator": { tireSize: "285/70R17", rimDiameter: 17, boltPattern: "5x127", offset: "+44mm" }
-    },
-    "Tesla": {
-        "Model 3": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+40mm" },
-        "Model Y": { tireSize: "255/45R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+40mm" },
-        "Model S": { tireSize: "265/35R21", rimDiameter: 21, boltPattern: "5x120", offset: "+40mm" },
-        "Model X": { tireSize: "265/45R20", rimDiameter: 20, boltPattern: "5x120", offset: "+35mm" }
-    },
-    "Volkswagen": {
-        "Jetta": { tireSize: "205/60R16", rimDiameter: 16, boltPattern: "5x112", offset: "+46mm" },
-        "Passat": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x112", offset: "+44mm" },
-        "Tiguan": { tireSize: "235/55R18", rimDiameter: 18, boltPattern: "5x112", offset: "+43mm" },
-        "Atlas": { tireSize: "255/55R18", rimDiameter: 18, boltPattern: "5x112", offset: "+40mm" },
-        "Golf": { tireSize: "225/45R17", rimDiameter: 17, boltPattern: "5x112", offset: "+49mm" },
-        "Arteon": { tireSize: "245/40R19", rimDiameter: 19, boltPattern: "5x112", offset: "+42mm" }
-    },
-    "Lexus": {
-        "ES": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+45mm" },
-        "RX": { tireSize: "235/65R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+40mm" },
-        "NX": { tireSize: "235/60R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+42mm" },
-        "UX": { tireSize: "225/50R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+45mm" },
-        "GX": { tireSize: "265/60R18", rimDiameter: 18, boltPattern: "6x139.7", offset: "+25mm" },
-        "LX": { tireSize: "285/50R22", rimDiameter: 22, boltPattern: "6x139.7", offset: "+30mm" }
-    },
-    "Mazda": {
-        "Mazda3": { tireSize: "215/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+50mm" },
-        "Mazda6": { tireSize: "225/45R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+50mm" },
-        "CX-5": { tireSize: "225/55R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+45mm" },
-        "CX-9": { tireSize: "255/50R20", rimDiameter: 20, boltPattern: "5x114.3", offset: "+45mm" },
-        "CX-30": { tireSize: "215/55R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+48mm" },
-        "MX-5 Miata": { tireSize: "205/45R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+45mm" }
     }
 };
 
@@ -270,50 +161,60 @@ function calculateAlternateSizes(width, aspectRatio, rimDiameter) {
     return alternates.slice(0, 4); // Limit to 4 alternates
 }
 
-// DOM Elements
-const yearSelect = document.getElementById('year');
-const makeSelect = document.getElementById('make');
-const modelSelect = document.getElementById('model');
-const resultsCard = document.getElementById('results');
+// DOM Elements with safe access
+function getElement(id) {
+    return document.getElementById(id);
+}
 
 // Initialize application
 async function initApp() {
-    console.log("Initializing Tire Fitment App with Car Stockpile API");
+    console.log("Initializing Tire Fitment App");
+    
+    // Test API connection
+    const apiConnected = await testAPI();
+    
+    // Update API status display
+    const apiStatusElement = getElement('api-status');
+    if (apiStatusElement) {
+        if (apiConnected) {
+            apiStatusElement.innerHTML = '<i class="fas fa-wifi"></i> <span>API: Online</span>';
+            apiStatusElement.className = 'api-status-badge online';
+        } else {
+            apiStatusElement.innerHTML = '<i class="fas fa-database"></i> <span>API: Offline (Local DB)</span>';
+            apiStatusElement.className = 'api-status-badge offline';
+        }
+    }
+    
     populateYears();
     setupEventListeners();
-    testAPI();
 }
 
-// Test the API
+// Test API connection
 async function testAPI() {
     try {
-        const response = await fetch(
-            'https://car-stockpile.p.rapidapi.com/models-for-year?year=2023&make=Toyota',
-            {
-                method: 'GET',
-                headers: {
-                    'x-rapidapi-key': RAPIDAPI_KEY,
-                    'x-rapidapi-host': RAPIDAPI_HOST
-                }
-            }
-        );
+        console.log("Testing API connection...");
         
-        if (response.ok) {
-            console.log("API Connection: SUCCESS");
-            document.getElementById('api-status').textContent = "API: Online";
-            document.getElementById('api-status').className = "api-status online";
-            return true;
-        }
+        const response = await fetch('https://car-stockpile.p.rapidapi.com/makes?year=2024', {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': RAPIDAPI_KEY,
+                'x-rapidapi-host': RAPIDAPI_HOST
+            }
+        });
+        
+        return response.ok;
+        
     } catch (error) {
-        console.log("API Connection: FAILED - Using local database");
-        document.getElementById('api-status').textContent = "API: Offline (Using Local Data)";
-        document.getElementById('api-status').className = "api-status offline";
+        console.log("API test failed:", error.message);
+        return false;
     }
-    return false;
 }
 
 // Populate years (2000-2024)
 function populateYears() {
+    const yearSelect = getElement('year');
+    if (!yearSelect) return;
+    
     const currentYear = new Date().getFullYear();
     const startYear = 2000;
     
@@ -329,13 +230,22 @@ function populateYears() {
 
 // Setup event listeners
 function setupEventListeners() {
-    yearSelect.addEventListener('change', handleYearChange);
-    makeSelect.addEventListener('change', handleMakeChange);
-    modelSelect.addEventListener('change', handleModelChange);
+    const yearSelect = getElement('year');
+    const makeSelect = getElement('make');
+    const modelSelect = getElement('model');
+    
+    if (yearSelect) yearSelect.addEventListener('change', handleYearChange);
+    if (makeSelect) makeSelect.addEventListener('change', handleMakeChange);
+    if (modelSelect) modelSelect.addEventListener('change', handleModelChange);
 }
 
-// Handle year selection - Fetch makes from API
+// Handle year selection
 async function handleYearChange() {
+    const yearSelect = getElement('year');
+    const makeSelect = getElement('make');
+    
+    if (!yearSelect || !makeSelect) return;
+    
     const year = yearSelect.value;
     
     if (!year) {
@@ -346,51 +256,51 @@ async function handleYearChange() {
     showLoading(true);
     
     try {
-        // Fetch makes from Car Stockpile API
-        const makes = await fetchMakesFromAPI(year);
+        let makes = [];
         
-        if (makes && makes.length > 0) {
-            populateDropdown(makeSelect, makes, 'Select Make');
-            makeSelect.disabled = false;
-        } else {
-            // Fallback to local makes
-            const localMakes = Object.keys(tireDatabase).sort();
-            populateDropdown(makeSelect, localMakes, 'Select Make');
-            makeSelect.disabled = false;
+        // Try to fetch from API
+        makes = await fetchMakesFromAPI(year);
+        
+        // If API failed or returned no data, use local
+        if (makes.length === 0) {
+            makes = getLocalMakes(year);
         }
-    } catch (error) {
-        console.error("Error fetching makes:", error);
-        // Fallback to local makes
-        const localMakes = Object.keys(tireDatabase).sort();
-        populateDropdown(makeSelect, localMakes, 'Select Make');
+        
+        populateDropdown(makeSelect, makes, 'Select Make');
         makeSelect.disabled = false;
+        
+        // Reset model dropdown
+        resetModels();
+        
+    } catch (error) {
+        console.error("Error loading makes:", error);
+        const makes = getLocalMakes(year);
+        populateDropdown(makeSelect, makes, 'Select Make');
+        makeSelect.disabled = false;
+        resetModels();
     } finally {
         showLoading(false);
-        resetModels();
     }
 }
 
-// Fetch makes from Car Stockpile API
+// Fetch makes from API
 async function fetchMakesFromAPI(year) {
     try {
-        const response = await fetch(
-            `https://car-stockpile.p.rapidapi.com/makes-for-year?year=${year}`,
-            {
-                method: 'GET',
-                headers: {
-                    'x-rapidapi-key': RAPIDAPI_KEY,
-                    'x-rapidapi-host': RAPIDAPI_HOST
-                }
+        const response = await fetch(`https://car-stockpile.p.rapidapi.com/makes?year=${year}`, {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': RAPIDAPI_KEY,
+                'x-rapidapi-host': RAPIDAPI_HOST
             }
-        );
+        });
         
         if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`);
+            return [];
         }
         
         const data = await response.json();
         
-        // Parse API response - adjust based on actual API structure
+        // Parse response based on common RapidAPI formats
         if (Array.isArray(data)) {
             return data.map(item => item.make || item.name || item).filter(Boolean).sort();
         } else if (data.makes && Array.isArray(data.makes)) {
@@ -400,14 +310,31 @@ async function fetchMakesFromAPI(year) {
         }
         
         return [];
+        
     } catch (error) {
         console.warn("Failed to fetch makes from API:", error.message);
         return [];
     }
 }
 
-// Handle make selection - Fetch models from API
+// Get makes from local database
+function getLocalMakes(year) {
+    // Return common makes regardless of year for simplicity
+    const commonMakes = [
+        "Audi", "BMW", "Mercedes-Benz", "Toyota", "Honda", "Ford", "Chevrolet",
+        "Nissan", "Hyundai", "Kia", "Subaru", "Jeep", "Tesla", "Volkswagen", "Lexus", "Mazda"
+    ];
+    return commonMakes.sort();
+}
+
+// Handle make selection
 async function handleMakeChange() {
+    const yearSelect = getElement('year');
+    const makeSelect = getElement('make');
+    const modelSelect = getElement('model');
+    
+    if (!yearSelect || !makeSelect || !modelSelect) return;
+    
     const year = yearSelect.value;
     const make = makeSelect.value;
     
@@ -419,50 +346,57 @@ async function handleMakeChange() {
     showLoading(true);
     
     try {
-        // Fetch models from Car Stockpile API
-        const models = await fetchModelsFromAPI(year, make);
+        let models = [];
         
-        if (models && models.length > 0) {
+        // Try to fetch from API
+        models = await fetchModelsFromAPI(year, make);
+        
+        // If API failed or returned no data, use local
+        if (models.length === 0) {
+            models = getLocalModels(year, make);
+        }
+        
+        if (models.length > 0) {
             populateDropdown(modelSelect, models, 'Select Model');
             modelSelect.disabled = false;
         } else {
-            // Fallback to local models
-            const localModels = tireDatabase[make] ? Object.keys(tireDatabase[make]).sort() : [];
-            populateDropdown(modelSelect, localModels, 'Select Model');
-            modelSelect.disabled = localModels.length > 0;
+            modelSelect.innerHTML = '<option value="">No models found</option>';
+            modelSelect.disabled = false;
         }
+        
     } catch (error) {
-        console.error("Error fetching models:", error);
-        // Fallback to local models
-        const localModels = tireDatabase[make] ? Object.keys(tireDatabase[make]).sort() : [];
-        populateDropdown(modelSelect, localModels, 'Select Model');
-        modelSelect.disabled = localModels.length > 0;
+        console.error("Error loading models:", error);
+        const models = getLocalModels(year, make);
+        if (models.length > 0) {
+            populateDropdown(modelSelect, models, 'Select Model');
+            modelSelect.disabled = false;
+        } else {
+            modelSelect.innerHTML = '<option value="">No models found</option>';
+            modelSelect.disabled = false;
+        }
     } finally {
         showLoading(false);
     }
 }
 
-// Fetch models from Car Stockpile API
+// Fetch models from API
 async function fetchModelsFromAPI(year, make) {
     try {
-        const response = await fetch(
-            `https://car-stockpile.p.rapidapi.com/models-for-year?year=${year}&make=${encodeURIComponent(make)}`,
-            {
-                method: 'GET',
-                headers: {
-                    'x-rapidapi-key': RAPIDAPI_KEY,
-                    'x-rapidapi-host': RAPIDAPI_HOST
-                }
+        const response = await fetch(`https://car-stockpile.p.rapidapi.com/models?make=${encodeURIComponent(make)}&year=${year}`, {
+            method: 'GET',
+            headers: {
+                'x-rapidapi-key': RAPIDAPI_KEY,
+                'x-rapidapi-host': RAPIDAPI_HOST
             }
-        );
+        });
         
         if (!response.ok) {
-            throw new Error(`API Error: ${response.status}`);
+            return [];
         }
         
         const data = await response.json();
         
-        // Parse API response - adjust based on actual API structure
+        // Parse response based on common RapidAPI formats
         if (Array.isArray(data)) {
             return data.map(item => item.model || item.name || item).filter(Boolean).sort();
         } else if (data.models && Array.isArray(data.models)) {
@@ -472,14 +406,29 @@ async function fetchModelsFromAPI(year, make) {
         }
         
         return [];
+        
     } catch (error) {
         console.warn("Failed to fetch models from API:", error.message);
         return [];
     }
 }
 
-// Handle model selection - Get tire data
+// Get models from local database
+function getLocalModels(year, make) {
+    if (tireDatabase[make]) {
+        return Object.keys(tireDatabase[make]).sort();
+    }
+    return [];
+}
+
+// Handle model selection
 async function handleModelChange() {
+    const yearSelect = getElement('year');
+    const makeSelect = getElement('make');
+    const modelSelect = getElement('model');
+    
+    if (!yearSelect || !makeSelect || !modelSelect) return;
+    
     const year = yearSelect.value;
     const make = makeSelect.value;
     const model = modelSelect.value;
@@ -492,62 +441,68 @@ async function handleModelChange() {
     showLoading(true);
     
     try {
-        // Try to get from local database first
-        let tireData = null;
+        let vehicleData = null;
         
+        // Try to get from local database first (more reliable)
         if (tireDatabase[make] && tireDatabase[make][model]) {
-            tireData = getCompleteTireData(tireDatabase[make][model]);
-        } else {
-            // Try to fetch from API (if API has tire data)
-            tireData = await fetchTireDataFromAPI(year, make, model);
+            vehicleData = getCompleteTireData(tireDatabase[make][model]);
         }
         
-        if (tireData) {
-            displayVehicleInfo(year, make, model, tireData);
+        if (vehicleData) {
+            displayVehicleInfo(year, make, model, vehicleData);
             showResults();
         } else {
             // Generate default tire data
-            tireData = getCompleteTireData({
+            vehicleData = getCompleteTireData({
                 tireSize: "235/45R18",
                 boltPattern: "5x114.3",
                 offset: "+40mm"
             });
-            displayVehicleInfo(year, make, model, tireData);
+            displayVehicleInfo(year, make, model, vehicleData);
             showResults();
         }
+        
     } catch (error) {
         console.error("Error getting tire data:", error);
         // Generate default tire data
-        const tireData = getCompleteTireData({
+        const vehicleData = getCompleteTireData({
             tireSize: "235/45R18",
             boltPattern: "5x114.3",
             offset: "+40mm"
         });
-        displayVehicleInfo(year, make, model, tireData);
+        displayVehicleInfo(year, make, model, vehicleData);
         showResults();
     } finally {
         showLoading(false);
     }
 }
 
-// Try to fetch tire data from API (if available)
-async function fetchTireDataFromAPI(year, make, model) {
-    // Note: Your Car Stockpile API might not have tire data
-    // This is a placeholder if the API adds tire specifications
-    return null;
-}
-
-// Display vehicle information
+// Display vehicle information with safe element access
 function displayVehicleInfo(year, make, model, data) {
+    // Safe element updates
+    const updateElement = (id, content) => {
+        const element = getElement(id);
+        if (element && content !== undefined) {
+            element.textContent = content;
+        }
+    };
+    
+    const updateHTML = (id, html) => {
+        const element = getElement(id);
+        if (element && html !== undefined) {
+            element.innerHTML = html;
+        }
+    };
+    
     // Update vehicle title
-    document.getElementById('vehicle-title').textContent = `${year} ${make} ${model}`;
-    document.getElementById('vehicle-subtitle').textContent = "Tire Specifications";
+    updateElement('vehicle-title', `${year} ${make} ${model}`);
+    updateElement('vehicle-subtitle', "Tire Specifications");
     
     // Update primary tire size
-    document.getElementById('primary-size').textContent = data.tireSize;
+    updateElement('primary-size', data.tireSize);
     
     // Update tire size breakdown
-    document.getElementById('size-breakdown').innerHTML = `
+    updateHTML('size-breakdown', `
         <div class="breakdown-item">
             <div class="value">${data.width}mm</div>
             <div class="label">Width</div>
@@ -564,71 +519,46 @@ function displayVehicleInfo(year, make, model, data) {
             <div class="value">${data.sectionHeight}mm</div>
             <div class="label">Sidewall</div>
         </div>
-    `;
+    `);
     
     // Update wheel specifications
-    document.getElementById('rim-diameter').textContent = `${data.rimDiameter}"`;
-    document.getElementById('rim-width').textContent = data.rimWidth;
-    document.getElementById('bolt-pattern').textContent = data.boltPattern;
-    document.getElementById('offset').textContent = data.offset;
+    updateElement('rim-diameter', `${data.rimDiameter}"`);
+    updateElement('rim-width', data.rimWidth);
+    updateElement('bolt-pattern', data.boltPattern);
+    updateElement('offset', data.offset);
     
     // Update tire specifications
-    document.getElementById('load-index').textContent = data.loadIndex;
-    document.getElementById('speed-rating').textContent = data.speedRating;
-    document.getElementById('pressure-front').textContent = data.pressureFront;
-    document.getElementById('pressure-rear').textContent = data.pressureRear;
-    
-    // Update advanced specifications
-    const advancedSection = document.getElementById('advanced-specs') || createAdvancedSpecsSection();
-    advancedSection.innerHTML = `
-        <div class="fitment-item">
-            <span class="label">Overall Diameter</span>
-            <span class="value">${data.overallDiameter}mm</span>
-        </div>
-        <div class="fitment-item">
-            <span class="label">Revolutions per Mile</span>
-            <span class="value">${data.revolutionsPerMile}</span>
-        </div>
-        <div class="fitment-item">
-            <span class="label">Section Height</span>
-            <span class="value">${data.sectionHeight}mm</span>
-        </div>
-    `;
+    updateElement('load-index', data.loadIndex);
+    updateElement('speed-rating', `${data.speedRating} (${getSpeedRatingMPH(data.speedRating)})`);
+    updateElement('pressure-front', data.pressureFront);
+    updateElement('pressure-rear', data.pressureRear);
     
     // Update alternate sizes
-    const alternateSizesList = document.getElementById('alternate-sizes');
-    alternateSizesList.innerHTML = '';
-    
-    if (data.alternateSizes && data.alternateSizes.length > 0) {
+    const alternateSizesList = getElement('alternate-sizes');
+    if (alternateSizesList && data.alternateSizes && data.alternateSizes.length > 0) {
+        alternateSizesList.innerHTML = '';
         data.alternateSizes.forEach(size => {
             const li = document.createElement('li');
             li.textContent = size;
             alternateSizesList.appendChild(li);
         });
-        document.getElementById('alternate-container').style.display = 'block';
-    } else {
-        document.getElementById('alternate-container').style.display = 'none';
     }
 }
 
-function createAdvancedSpecsSection() {
-    const section = document.createElement('div');
-    section.id = 'advanced-specs';
-    section.className = 'fitment-section';
-    section.innerHTML = `
-        <h3><span class="icon">📊</span> Advanced Specifications</h3>
-    `;
-    
-    const fitmentGrid = document.querySelector('.fitment-grid');
-    if (fitmentGrid) {
-        fitmentGrid.appendChild(section);
-    }
-    
-    return section;
+function getSpeedRatingMPH(speedRating) {
+    const ratings = {
+        "Q": "99 mph", "R": "106 mph", "S": "112 mph",
+        "T": "118 mph", "U": "124 mph", "H": "130 mph",
+        "V": "149 mph", "W": "168 mph", "Y": "186 mph",
+        "Z": "149+ mph"
+    };
+    return ratings[speedRating] || "Unknown";
 }
 
 // Helper functions
 function populateDropdown(selectElement, items, placeholder) {
+    if (!selectElement) return;
+    
     selectElement.innerHTML = `<option value="">${placeholder}</option>`;
     items.forEach(item => {
         const option = document.createElement('option');
@@ -639,75 +569,65 @@ function populateDropdown(selectElement, items, placeholder) {
 }
 
 function resetMakes() {
+    const makeSelect = getElement('make');
+    if (!makeSelect) return;
+    
     makeSelect.innerHTML = '<option value="">Select Make</option>';
     makeSelect.disabled = true;
     resetModels();
 }
 
 function resetModels() {
+    const modelSelect = getElement('model');
+    if (!modelSelect) return;
+    
     modelSelect.innerHTML = '<option value="">Select Model</option>';
     modelSelect.disabled = true;
     hideResults();
 }
 
 function showLoading(show) {
-    const loader = document.getElementById('loading-overlay') || createLoadingOverlay();
-    loader.style.display = show ? 'flex' : 'none';
-}
-
-function createLoadingOverlay() {
-    const overlay = document.createElement('div');
-    overlay.id = 'loading-overlay';
-    overlay.innerHTML = `
-        <div class="loading-spinner"></div>
-        <style>
-            #loading-overlay {
-                position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
-                background: rgba(0,0,0,0.7);
-                display: none;
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-            }
-            .loading-spinner {
-                width: 50px;
-                height: 50px;
-                border: 5px solid #f3f3f3;
-                border-top: 5px solid #3b82f6;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-            }
-            @keyframes spin {
-                0% { transform: rotate(0deg); }
-                100% { transform: rotate(360deg); }
-            }
-        </style>
-    `;
-    document.body.appendChild(overlay);
-    return overlay;
+    const loader = getElement('loading-overlay');
+    if (loader) {
+        loader.style.display = show ? 'flex' : 'none';
+    }
 }
 
 function showResults() {
-    resultsCard.classList.add('show');
-    setTimeout(() => {
-        resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    const resultsCard = getElement('results');
+    if (resultsCard) {
+        resultsCard.classList.add('show');
+        setTimeout(() => {
+            resultsCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
 }
 
 function hideResults() {
-    resultsCard.classList.remove('show');
+    const resultsCard = getElement('results');
+    if (resultsCard) {
+        resultsCard.classList.remove('show');
+    }
 }
 
 // Reset all selections
 function resetSelections() {
-    yearSelect.value = '';
-    makeSelect.value = '';
-    makeSelect.disabled = true;
-    makeSelect.innerHTML = '<option value="">Select Make</option>';
-    modelSelect.value = '';
-    modelSelect.disabled = true;
-    modelSelect.innerHTML = '<option value="">Select Model</option>';
+    const yearSelect = getElement('year');
+    const makeSelect = getElement('make');
+    const modelSelect = getElement('model');
+    
+    if (yearSelect) yearSelect.value = '';
+    if (makeSelect) {
+        makeSelect.value = '';
+        makeSelect.disabled = true;
+        makeSelect.innerHTML = '<option value="">Select Make</option>';
+    }
+    if (modelSelect) {
+        modelSelect.value = '';
+        modelSelect.disabled = true;
+        modelSelect.innerHTML = '<option value="">Select Model</option>';
+    }
+    
     hideResults();
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
