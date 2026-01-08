@@ -1,0 +1,28 @@
+mutation CreateTirePurchase($tireId: UUID!, $userVehicleId: UUID!, $mileageAtPurchase: Int, $price: Float!, $purchaseDate: Date!, $supplier: String) @auth(level: USER) {
+  tirePurchase_insert(data: {tireId: $tireId, userVehicleId: $userVehicleId, mileageAtPurchase: $mileageAtPurchase, price: $price, purchaseDate: $purchaseDate, supplier: $supplier})
+}
+
+query ListVehicles @auth(level: PUBLIC, insecureReason: "This operation is safe to expose to the public") {
+  vehicles {
+    id
+    make
+    model
+    year
+  }
+}
+
+query GetUserVehicles($userId: UUID!) @auth(level: USER) {
+  userVehicles(where: {userId: {eq: $userId}}) {
+    id
+    nickname
+    vehicle {
+      make
+      model
+      year
+    }
+  }
+}
+
+mutation CreateCompatibleFitment($vehicleId: UUID!, $tireId: UUID!, $wheelId: UUID!, $fitmentType: String!, $notes: String) @auth(level: USER) {
+  compatibleFitment_insert(data: {vehicleId: $vehicleId, tireId: $tireId, wheelId: $wheelId, fitmentType: $fitmentType, notes: $notes})
+}

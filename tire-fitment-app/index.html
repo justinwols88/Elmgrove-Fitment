@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elmgrove's Tire Fitment Guide | Find Your Vehicle's Tire Size</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-tire icon-logo"></i>
+                    <div class="logo-text">
+                        <span class="logo-primary">Elmsgrove's</span>
+                        <span class="logo-secondary">Tire Fitment</span>
+                    </div>
+                </div>
+                <nav class="main-nav">
+                    <a href="#finder" class="nav-link"><i class="fas fa-search"></i> Finder</a>
+                    <a href="#results" class="nav-link"><i class="fas fa-chart-bar"></i> Results</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="btn btn-outline"><i class="fas fa-user"></i> Sign In</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Finder Section -->
+            <section class="finder-section" id="finder">
+                <div class="section-header">
+                    <h2 class="section-title">Elmsgrove's Tire Size Finder</h2>
+                    <p class="section-subtitle">Select your vehicle year, make, and model to find the correct tire specifications.</p>
+                </div>
+                
+                <div class="finder-card">
+                    <div class="finder-steps">
+                        <div class="step active">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Select Year</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Choose Make</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Pick Model</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-label">Get Results</div>
+                        </div>
+                    </div>
+
+                    <div class="vehicle-selector">
+                        <div class="selector-group">
+                            <div class="select-wrapper">
+                                <label for="year" class="select-label">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Vehicle Year
+                                </label>
+                                <select id="year" class="form-select">
+                                    <option value="">Select Year</option>
+                                    <!-- Years populated by JS -->
+                                </select>
+                            </div>
+                            <div class="select-wrapper">
+                                <label for="make" class="select-label">
+                                    <i class="fas fa-car"></i>
+                                    Vehicle Make
+                                </label>
+                                <select id="make" class="form-select" disabled>
+                                    <option value="">Select Make</option>
+                                </select>
+                            </div>
+                            <div class="select-wrapper">
+                                <label for="model" class="select-label">
+                                    <i class="fas fa-cog"></i>
+                                    Vehicle Model
+                                </label>
+                                <select id="model" class="form-select" disabled>
+                                    <option value="">Select Model</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="finder-actions">
+                            <button class="btn btn-primary btn-find" onclick="handleSearch()">
+                                <i class="fas fa-search"></i>
+                                Find Tire Size
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetSelections()">
+                                <i class="fas fa-redo"></i>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="results">
+                <div class="section-header">
+                    <h2 class="section-title">Tire Specifications</h2>
+                    <p class="section-subtitle">Detailed tire and wheel specifications for your selected vehicle.</p>
+                </div>
+
+                <div class="results-card">
+                    <div class="vehicle-header">
+                        <div class="vehicle-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="vehicle-info">
+                            <h3 id="vehicle-title">Select a Vehicle</h3>
+                            <p id="vehicle-subtitle">Choose a vehicle above to see tire specifications</p>
+                        </div>
+                        <div class="api-status-badge" id="api-status">
+                            <i class="fas fa-wifi"></i>
+                            <span>API: Online</span>
+                        </div>
+                    </div>
+
+                    <div class="specifications-grid">
+                        <!-- Tire Size Card -->
+                        <div class="spec-card primary-spec">
+                            <div class="spec-header">
+                                <i class="fas fa-tire"></i>
+                                <h4>OEM Tire Size</h4>
+                            </div>
+                            <div class="spec-content">
+                                <div class="tire-size-display" id="primary-size">235/45R18</div>
+                                <div class="size-breakdown">
+                                    <div class="breakdown-item">
+                                        <div class="value" id="tire-width">235</div>
+                                        <div class="label">Width (mm)</div>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <div class="value" id="aspect-ratio">45</div>
+                                        <div class="label">Aspect Ratio</div>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <div class="value" id="rim-diameter">18</div>
+                                        <div class="label">Rim Diameter</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wheel Specs Card -->
+                        <div class="spec-card">
+                            <div class="spec-header">
+                                <i class="fas fa-cog"></i>
+                                <h4>Wheel Specifications</h4>
+                            </div>
+                            <div class="spec-content">
+                                <div class="spec-item">
+                                    <span class="label">Rim Width</span>
+                                    <span class="value" id="rim-width">9.0"</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Bolt Pattern</span>
+                                    <span class="value" id="bolt-pattern">5x114.3</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Offset</span>
+                                    <span class="value" id="offset">+40mm</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Center Bore</span>
+                                    <span class="value" id="center-bore">67.1mm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tire Specs Card -->
+                        <div class="spec-card">
+                            <div class="spec-header">
+                                <i class="fas fa-tire-pressure-warning"></i>
+                                <h4>Tire Specifications</h4>
+                            </div>
+                            <div class="spec-content">
+                                <div class="spec-item">
+                                    <span class="label">Load Index</span>
+                                    <span class="value" id="load-index">94</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Speed Rating</span>
+                                    <span class="value" id="speed-rating">V (149 mph)</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Pressure (Front)</span>
+                                    <span class="value" id="pressure-front">35 PSI</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Pressure (Rear)</span>
+                                    <span class="value" id="pressure-rear">35 PSI</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alternative Sizes Card -->
+                        <div class="spec-card">
+                            <div class="spec-header">
+                                <i class="fas fa-exchange-alt"></i>
+                                <h4>Alternative Sizes</h4>
+                            </div>
+                            <div class="spec-content">
+                                <div class="alternate-sizes-list" id="alternate-sizes">
+                                    <span class="alt-size">225/45R18</span>
+                                    <span class="alt-size">245/40R18</span>
+                                    <span class="alt-size">235/40R19</span>
+                                    <span class="alt-size">225/40R19</span>
+                                </div>
+                                <p class="alternate-note">These sizes are compatible with your vehicle</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button class="btn btn-outline" onclick="printFitment()">
+                            <i class="fas fa-print"></i>
+                            Print Specs
+                        </button>
+                        <button class="btn btn-outline" onclick="saveFitment()">
+                            <i class="fas fa-save"></i>
+                            Save Fitment
+                        </button>
+                        <button class="btn btn-primary" onclick="shareFitment()">
+                            <i class="fas fa-share"></i>
+                            Share Results
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-tire icon-logo"></i>
+                        <div class="logo-text">
+                            <span class="logo-primary">Tire</span>
+                            <span class="logo-secondary">Fitment</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Elmsgrove's tire fitment for University place tire shop. 
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#finder"><i class="fas fa-search"></i> Finder</a></li>
+                        <li><a href="#results"><i class="fas fa-chart-bar"></i> Results</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4 class="footer-heading">API Status</h4>
+                    <div class="api-status-footer">
+                        <div class="status-indicator online">
+                            <div class="status-dot"></div>
+                            <span>Car Stockpile API: Online</span>
+                        </div>
+                        <p class="status-note">Using RapidAPI for real-time vehicle data</p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Justin Wold. All rights reserved.</p>
+                <p class="footer-disclaimer">
+                    Always verify the rim sizeto confirm fitment before installing tires or wheels for your vehicle.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading vehicle data...</p>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Helper functions for HTML
+        function handleSearch() {
+            const year = document.getElementById('year').value;
+            const make = document.getElementById('make').value;
+            const model = document.getElementById('model').value;
+            
+            if (year && make && model) {
+                // Update steps
+                updateSteps(4);
+                // Trigger the model change handler
+                if (typeof handleModelChange === 'function') {
+                    handleModelChange();
+                }
+            } else {
+                alert('Please select year, make, and model');
+            }
+        }
+        
+        function updateSteps(step) {
+            const steps = document.querySelectorAll('.step');
+            steps.forEach((s, index) => {
+                if (index < step) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+        }
+        
+        function printFitment() {
+            window.print();
+        }
+        
+        function saveFitment() {
+            const vehicle = document.getElementById('vehicle-title').textContent;
+            const tireSize = document.getElementById('primary-size').textContent;
+            
+            let saved = JSON.parse(localStorage.getItem('savedFitments') || '[]');
+            saved.push({
+                vehicle: vehicle,
+                tireSize: tireSize,
+                date: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('savedFitments', JSON.stringify(saved));
+            
+            // Show success message
+            alert(`Saved: ${vehicle} - ${tireSize}`);
+        }
+        
+        function shareFitment() {
+            const vehicle = document.getElementById('vehicle-title').textContent;
+            const tireSize = document.getElementById('primary-size').textContent;
+            const text = `Tire fitment for ${vehicle}: ${tireSize} - Find yours at TireFitment.com`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Tire Fitment Results',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Fitment copied to clipboard!');
+                });
+            }
+        }
+        
+        // Initialize steps based on selections
+        document.getElementById('year').addEventListener('change', () => updateSteps(1));
+        document.getElementById('make').addEventListener('change', () => updateSteps(2));
+        document.getElementById('model').addEventListener('change', () => updateSteps(3));
+        
+        // Quick select examples (for popular vehicles)
+        window.quickSelect = function(year, make, model) {
+            document.getElementById('year').value = year;
+            document.getElementById('make').value = make;
+            document.getElementById('model').value = model;
+            handleSearch();
+        }
+    </script>
+</body>
+</html>

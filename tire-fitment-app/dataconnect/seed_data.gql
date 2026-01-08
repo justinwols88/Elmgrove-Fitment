@@ -1,0 +1,46 @@
+mutation CreateSeedData @auth(level: PUBLIC, insecureReason: "This mutation is used to populate the database with seed data") {
+  tire_insertMany(data: [
+    {
+      brand: "Goodyear",
+      createdAt: "2024-04-26T00:00:00Z",
+      modelName: "Assurance WeatherReady",
+      size: "225/65R17"
+    },
+    {
+      brand: "Michelin",
+      createdAt: "2024-04-26T00:00:00Z",
+      modelName: "CrossClimate2",
+      size: "235/55R18"
+    }
+  ])
+  vehicle_insertMany(data: [
+    {
+      createdAt: "2024-04-26T00:00:00Z",
+      make: "Honda",
+      model: "CR-V",
+      year: 2023
+    },
+    {
+      createdAt: "2024-04-26T00:00:00Z",
+      make: "Toyota",
+      model: "RAV4",
+      year: 2024
+    }
+  ])
+  wheel_insertMany(data: [
+    {
+      boltPattern: "5x114.3",
+      brand: "Enkei",
+      createdAt: "2024-04-26T00:00:00Z",
+      modelName: "TS-5",
+      size: "17x8"
+    },
+    {
+      boltPattern: "5x114.3",
+      brand: "Konig",
+      createdAt: "2024-04-26T00:00:00Z",
+      modelName: "Oversteer",
+      size: "18x8.5"
+    }
+  ])
+}

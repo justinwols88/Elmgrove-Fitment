@@ -1,0 +1,64 @@
+type User @table {
+  displayName: String!
+  createdAt: Timestamp!
+  email: String
+  photoUrl: String
+}
+
+type Vehicle @table {
+  make: String!
+  model: String!
+  year: Int!
+  createdAt: Timestamp!
+  trim: String
+  factoryTireSize: String
+  factoryWheelSize: String
+}
+
+type UserVehicle @table {
+  user: User!
+  vehicle: Vehicle!
+  nickname: String!
+  createdAt: Timestamp!
+  notes: String
+}
+
+type Tire @table {
+  brand: String!
+  modelName: String!
+  size: String!
+  createdAt: Timestamp!
+  type: String
+  loadIndex: String
+  speedRating: String
+  description: String
+}
+
+type Wheel @table {
+  brand: String!
+  modelName: String!
+  size: String!
+  boltPattern: String!
+  createdAt: Timestamp!
+  offset: String
+  color: String
+  description: String
+}
+
+type CompatibleFitment @table(key: ["vehicle", "tire", "wheel", "fitmentType"]) {
+  vehicle: Vehicle!
+  tire: Tire!
+  wheel: Wheel!
+  fitmentType: String!
+  notes: String
+}
+
+type TirePurchase @table {
+  userVehicle: UserVehicle!
+  tire: Tire!
+  purchaseDate: Date!
+  createdAt: Timestamp!
+  mileageAtPurchase: Int
+  price: Float
+  supplier: String
+}
