@@ -1,6 +1,13 @@
 {
-  "dependencies": {
-    "@dataconnect/generated": "file:src/dataconnect-generated",
-    "firebase": "^12.7.0"
+  "name": "tire-fitment-calculator",
+  "version": "1.0.0",
+  "description": "Tire Fitment Calculator using Wheel-Size.com API",
+  "scripts": {
+    "dev": "npx serve",
+    "build": "echo 'No build required for static site'",
+    "start": "npx serve"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
   }
 }
