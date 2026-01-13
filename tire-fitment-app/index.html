@@ -3,14 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elmgrove's Tire Fitment Guide | Find Your Vehicle's Tire Size</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Content Security Policy - Fixed for CSP compliance -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' https://cdnjs.cloudflare.com/ajax/libs https://www.gstatic.com;
+        style-src 'self' https://cdnjs.cloudflare.com/ajax/libs https://fonts.googleapis.com;
+        font-src 'self' https://cdnjs.cloudflare.com/ajax/libs https://fonts.gstatic.com;
+        img-src 'self' data: https:;
+        connect-src 'self' https://api.wheel-size.com;
+        frame-src 'none';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+    ">
+    
+    <title>Tire Fitment Calculator</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Header -->
@@ -29,7 +38,9 @@
                     <a href="#results" class="nav-link"><i class="fas fa-chart-bar"></i> Results</a>
                 </nav>
                 <div class="header-actions">
-                    <button class="btn btn-outline"><i class="fas fa-user"></i> Sign In</button>
+                    <button class="btn btn-outline" id="signin-button">
+                        <i class="fas fa-user"></i> Sign In
+                    </button>
                 </div>
             </div>
         </div>
@@ -42,9 +53,11 @@
             <section class="finder-section" id="finder">
                 <div class="section-header">
                     <h2 class="section-title">Elmsgrove's Tire Size Finder</h2>
-                    <p class="section-subtitle">Select your vehicle year, make, and model to find the correct tire specifications.</p>
+                    <p class="section-subtitle">
+                        Select your vehicle year, make, and model to find the correct tire specifications.
+                    </p>
                 </div>
-                
+
                 <div class="finder-card">
                     <div class="finder-steps">
                         <div class="step active">
@@ -96,13 +109,13 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="finder-actions">
-                            <button class="btn btn-primary btn-find" onclick="handleSearch()">
+                            <button class="btn btn-primary btn-find" id="find-button">
                                 <i class="fas fa-search"></i>
                                 Find Tire Size
                             </button>
-                            <button class="btn btn-secondary" onclick="resetSelections()">
+                            <button class="btn btn-secondary" id="reset-button">
                                 <i class="fas fa-redo"></i>
                                 Reset
                             </button>
@@ -115,17 +128,21 @@
             <section class="results-section" id="results">
                 <div class="section-header">
                     <h2 class="section-title">Tire Specifications</h2>
-                    <p class="section-subtitle">Detailed tire and wheel specifications for your selected vehicle.</p>
+                    <p class="section-subtitle">
+                        Detailed tire and wheel specifications for your selected vehicle.
+                    </p>
                 </div>
 
-                <div class="results-card">
+                <div class="results-card" id="results-container"">
                     <div class="vehicle-header">
                         <div class="vehicle-icon">
                             <i class="fas fa-car"></i>
                         </div>
                         <div class="vehicle-info">
                             <h3 id="vehicle-title">Select a Vehicle</h3>
-                            <p id="vehicle-subtitle">Choose a vehicle above to see tire specifications</p>
+                            <p id="vehicle-subtitle">
+                                Choose a vehicle above to see tire specifications
+                            </p>
                         </div>
                         <div class="api-status-badge" id="api-status">
                             <i class="fas fa-wifi"></i>
@@ -141,9 +158,10 @@
                                 <h4>OEM Tire Size</h4>
                             </div>
                             <div class="spec-content">
-                                <div class="tire-size-display" id="primary-size">235/45R18</div>
+                                <div class="tire-size-display" id="primary-size">
+                                    235/45R18
+                                </div>
                                 <div class="size-breakdown" id="size-breakdown">
-                                    <!-- Will be populated by JavaScript -->
                                     <div class="breakdown-item">
                                         <div class="value">235</div>
                                         <div class="label">Width</div>
@@ -231,10 +249,6 @@
                                     <span class="label">Revs per Mile</span>
                                     <span class="value" id="revs-per-mile">763</span>
                                 </div>
-                                <div class="spec-item">
-                                    <span class="label">Section Height</span>
-                                    <span class="value" id="section-height">106mm</span>
-                                </div>
                             </div>
                         </div>
 
@@ -246,27 +260,28 @@
                             </div>
                             <div class="spec-content">
                                 <ul class="alternate-sizes-list" id="alternate-sizes">
-                                    <!-- Will be populated by JavaScript -->
                                     <li>225/45R18</li>
                                     <li>245/40R18</li>
                                     <li>235/40R19</li>
                                     <li>225/40R19</li>
                                 </ul>
-                                <p class="alternate-note">These sizes are compatible with your vehicle</p>
+                                <p class="alternate-note">
+                                    These sizes are compatible with your vehicle
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <div class="results-actions">
-                        <button class="btn btn-outline" onclick="printFitment()">
+                        <button class="btn btn-outline" id="print-button">
                             <i class="fas fa-print"></i>
                             Print Specs
                         </button>
-                        <button class="btn btn-outline" onclick="saveFitment()">
+                        <button class="btn btn-outline" id="save-button">
                             <i class="fas fa-save"></i>
                             Save Fitment
                         </button>
-                        <button class="btn btn-primary" onclick="shareFitment()">
+                        <button class="btn btn-primary" id="share-button">
                             <i class="fas fa-share"></i>
                             Share Results
                         </button>
@@ -289,7 +304,7 @@
                         </div>
                     </div>
                     <p class="footer-description">
-                        Elmsgrove's tire fitment for University place tire shop. 
+                        Elmsgrove's tire fitment for University place tire shop.
                     </p>
                 </div>
                 <div class="footer-section">
@@ -306,7 +321,9 @@
                             <div class="status-dot"></div>
                             <span>Wheel-Size.com API</span>
                         </div>
-                        <p class="status-note">Using Wheel-Size.com for real-time vehicle data</p>
+                        <p class="status-note">
+                            Using Wheel-Size.com for real-time vehicle data
+                        </p>
                     </div>
                 </div>
             </div>
@@ -325,132 +342,16 @@
         <p>Loading vehicle data...</p>
     </div>
 
-    <!-- Save the JavaScript code as app.js and link it here -->
+    <!-- External Scripts at the bottom -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+    
+    <!-- Your app.js -->
     <script src="app.js"></script>
     
-    <script>
-        // Helper functions for HTML
-        function handleSearch() {
-            const year = document.getElementById('year').value;
-            const make = document.getElementById('make').value;
-            const model = document.getElementById('model').value;
-            
-            if (year && make && model) {
-                // Update steps
-                updateSteps(4);
-                // Trigger the model change handler
-                if (typeof handleModelChange === 'function') {
-                    // Trigger the change event on model select
-                    const modelSelect = document.getElementById('model');
-                    if (modelSelect) {
-                        modelSelect.dispatchEvent(new Event('change'));
-                    }
-                } else {
-                    console.error('handleModelChange function not found. Make sure app.js is loaded.');
-                }
-            } else {
-                alert('Please select year, make, and model');
-            }
-        }
-        
-        function updateSteps(step) {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach((s, index) => {
-                if (index < step) {
-                    s.classList.add('active');
-                } else {
-                    s.classList.remove('active');
-                }
-            });
-        }
-        
-        function printFitment() {
-            window.print();
-        }
-        
-        function saveFitment() {
-            const vehicle = document.getElementById('vehicle-title').textContent;
-            const tireSize = document.getElementById('primary-size').textContent;
-            
-            if (vehicle === 'Select a Vehicle') {
-                alert('Please select a vehicle first');
-                return;
-            }
-            
-            let saved = JSON.parse(localStorage.getItem('savedFitments') || '[]');
-            saved.push({
-                vehicle: vehicle,
-                tireSize: tireSize,
-                date: new Date().toISOString().split('T')[0]
-            });
-            localStorage.setItem('savedFitments', JSON.stringify(saved));
-            
-            // Show success message
-            alert(`Saved: ${vehicle} - ${tireSize}`);
-        }
-        
-        function shareFitment() {
-            const vehicle = document.getElementById('vehicle-title').textContent;
-            const tireSize = document.getElementById('primary-size').textContent;
-            
-            if (vehicle === 'Select a Vehicle') {
-                alert('Please select a vehicle first');
-                return;
-            }
-            
-            const text = `Tire fitment for ${vehicle}: ${tireSize} - Find yours at Elmsgrove's Tire Fitment`;
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Tire Fitment Results',
-                    text: text,
-                    url: window.location.href
-                });
-            } else {
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('Fitment copied to clipboard!');
-                });
-            }
-        }
-        
-        // Initialize steps based on selections
-        document.getElementById('year').addEventListener('change', () => updateSteps(1));
-        document.getElementById('make').addEventListener('change', () => updateSteps(2));
-        document.getElementById('model').addEventListener('change', () => updateSteps(3));
-        
-        // Quick select examples (for popular vehicles)
-        window.quickSelect = function(year, make, model) {
-            document.getElementById('year').value = year;
-            document.getElementById('make').value = make;
-            document.getElementById('model').value = model;
-            handleSearch();
-        }
-        
-        // Make resetSelections available globally
-        window.resetSelections = window.resetSelections || function() {
-            document.getElementById('year').value = '';
-            document.getElementById('make').value = '';
-            document.getElementById('make').disabled = true;
-            document.getElementById('make').innerHTML = '<option value="">Select Make</option>';
-            document.getElementById('model').value = '';
-            document.getElementById('model').disabled = true;
-            document.getElementById('model').innerHTML = '<option value="">Select Model</option>';
-            
-            // Hide results
-            const resultsCard = document.getElementById('results');
-            if (resultsCard) {
-                resultsCard.classList.remove('show');
-            }
-            
-            // Reset steps
-            updateSteps(0);
-            
-            // Reset vehicle info
-            document.getElementById('vehicle-title').textContent = 'Select a Vehicle';
-            document.getElementById('vehicle-subtitle').textContent = 'Choose a vehicle above to see tire specifications';
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-    </script>
+    <!-- Initialize app -->
+    <script src="init.js"></script>
 </body>
 </html>

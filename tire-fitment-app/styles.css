@@ -1,0 +1,978 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", sans-serif;
+    color: yellow;
+    line-height: 1.6;
+    background-color: #000000;
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+    font-weight: 600;
+    line-height: 1.2;
+    color: yellow;
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: yellow;
+    margin-bottom: 2rem;
+}
+
+/* Header */
+.main-header {
+    background-color: #000000;
+    box-shadow: 0 2px 10px yellow;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid yellow;
+    padding: 0 1rem;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    min-width: 150px;
+}
+
+.icon-logo {
+    font-size: 1.8rem;
+    color: yellow;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.logo-primary {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: yellow;
+}
+
+.logo-secondary {
+    font-size: 0.9rem;
+    color: yellow;
+    font-weight: 500;
+}
+
+.main-nav {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: yellow;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem;
+    position: relative;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.nav-link i {
+    font-size: 0.9rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: yellow;
+}
+
+.nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: yellow;
+}
+
+.header-actions {
+    margin-left: auto;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #000000 0%, #151515 100%);
+    padding: 2rem 0;
+    border-bottom: 1px solid yellow;
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: yellow;
+    margin-bottom: 1.5rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+    min-width: 80px;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: yellow;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: yellow;
+}
+
+.hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tire-visual {
+    background: #000000;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px yellow;
+    border: 2px solid yellow;
+}
+
+.icon-hero {
+    font-size: 3rem;
+    color: yellow;
+    margin-bottom: 0.5rem;
+}
+
+.tire-spec {
+    font-size: 1rem;
+    font-weight: 600;
+    color: yellow;
+}
+
+/* Finder Section */
+.finder-section {
+    padding: 2rem 0;
+    border-bottom: 1px solid yellow;
+}
+
+.finder-card {
+    background: #000000;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px yellow;
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+    border: 1px solid yellow;
+}
+
+.finder-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    position: relative;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.finder-steps::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background-color: #000000;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    min-width: 70px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: yellow;
+    color: rgb(0, 0, 0);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.step.active .step-number {
+    background-color: yellow;
+    color: #000000;
+    box-shadow: 0 4px 12px yellow;
+}
+
+.step-label {
+    font-size: 0.8rem;
+    color: yellow;
+    font-weight: 500;
+    text-align: center;
+    word-break: break-word;
+    padding: 0 0.25rem;
+}
+
+.step.active .step-label {
+    color: yellow;
+}
+
+.vehicle-selector {
+    background: #000000;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid yellow;
+}
+
+.selector-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.select-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.select-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: yellow;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-select {
+    padding: 0.75rem 1rem;
+    border: 1px solid #1a1a1a;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #000000;
+    color: yellow;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='yellow' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px;
+    width: 100%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-select:hover {
+    border-color: yellow;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: yellow;
+    box-shadow: 0 0 0 3px rgba(255, 255, 0, 0.1);
+}
+
+.form-select:disabled {
+    background-color: #000000;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.finder-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    justify-content: center;
+    min-height: 44px;
+}
+
+.btn-primary {
+    background-color: #000000;
+    color: yellow;
+    border: 1px solid yellow;
+}
+
+.btn-primary:hover {
+    background-color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 255, 0, 0.3);
+}
+
+.btn-secondary {
+    background-color: #000000;
+    color: yellow;
+    border: 1px solid yellow;
+}
+
+.btn-secondary:hover {
+    background-color: yellow;
+    color: #000000;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: yellow;
+    border: 1px solid yellow;
+}
+
+.btn-outline:hover {
+    background-color: #000000;
+    color: yellow;
+}
+
+.btn-find {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    min-width: 150px;
+}
+
+/* Results Section */
+.results-section {
+    padding: 2rem 0;
+}
+
+.results-card {
+    background: #000000;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    max-width: 100%;
+    margin: 0 auto;
+    border: 1px solid yellow;
+}
+
+.vehicle-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid yellow;
+    flex-wrap: wrap;
+}
+
+.vehicle-icon {
+    width: 50px;
+    height: 50px;
+    background-color: #000000;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vehicle-icon i {
+    font-size: 1.5rem;
+    color: yellow;
+}
+
+.vehicle-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.vehicle-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+    word-break: break-word;
+}
+
+.vehicle-info p {
+    color: yellow;
+    font-size: 0.9rem;
+}
+
+.api-status-badge {
+    background-color: #000000;
+    color: yellow;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    border: 1px solid yellow;
+}
+
+.api-status-badge i {
+    font-size: 0.75rem;
+}
+
+.specifications-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.spec-card {
+    background: #000000;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid yellow;
+}
+
+.primary-spec {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, #000000 0%, #101010 100%);
+    border: 1px solid yellow;
+}
+
+.spec-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.spec-header i {
+    font-size: 1rem;
+    color: yellow;
+}
+
+.spec-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.primary-spec .spec-header i,
+.primary-spec .spec-header h4 {
+    color: yellow;
+}
+
+.tire-size-display {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    color: yellow;
+    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    font-family: "Courier New", monospace;
+}
+
+.size-breakdown {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.breakdown-item {
+    text-align: center;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.breakdown-item .value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: yellow;
+    margin-bottom: 0.25rem;
+}
+
+.breakdown-item .label {
+    font-size: 0.75rem;
+    color: yellow;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.spec-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.spec-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid yellow;
+}
+
+.spec-item:last-child {
+    border-bottom: none;
+}
+
+.spec-item .label {
+    color: yellow;
+    font-size: 0.85rem;
+}
+
+.spec-item .value {
+    font-weight: 600;
+    color: yellow;
+    font-size: 0.9rem;
+    font-family: "Courier New", monospace;
+}
+
+.alternate-sizes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1rem 0;
+}
+
+.alternate-sizes-list li {
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid yellow;
+    font-family: "Courier New", monospace;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.alternate-note {
+    font-size: 0.75rem;
+    color: yellow;
+    font-style: italic;
+    text-align: center;
+}
+
+.results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid yellow;
+    flex-wrap: wrap;
+}
+
+.results-actions .btn {
+    flex: 1;
+    min-width: 140px;
+    max-width: 200px;
+}
+
+/* Footer */
+.main-footer {
+    background: #000000;
+    color: yellow;
+    padding: 2rem 0 1rem;
+    border-top: 1px solid yellow;
+    margin-top: 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section {
+    text-align: center;
+}
+
+.footer-section .logo {
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.footer-description {
+    color: yellow;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.footer-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: yellow;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.footer-links li {
+    width: 100%;
+    max-width: 200px;
+}
+
+.footer-links a {
+    color: yellow;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.footer-links a:hover {
+    color: #f30505;
+}
+
+.api-status-footer {
+    background: #000000;
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid yellow;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: yellow;
+    border-radius: 50%;
+}
+
+.status-note {
+    font-size: 0.8rem;
+    color: yellow;
+    text-align: center;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid yellow;
+    color: yellow;
+    font-size: 0.875rem;
+}
+
+.footer-disclaimer {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: yellow;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid yellow;
+    border-top: 3px solid #000000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-overlay p {
+    color: yellow;
+    font-weight: 500;
+    font-size: 1rem;
+    text-align: center;
+}
+
+/* Info Message Styles */
+.info-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #000;
+    color: yellow;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid yellow;
+    z-index: 10000;
+    max-width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.info-message-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 10px;
+}
+
+.info-message-text {
+    flex: 1;
+}
+
+.info-message-text p {
+    margin: 8px 0 0 0;
+    font-size: 0.9em;
+}
+
+.info-message-close {
+    background: none;
+    border: none;
+    color: yellow;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    .selector-group {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .specifications-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .tire-size-display {
+        font-size: 2rem;
+    }
+    
+    .size-breakdown {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(3, 1fr);
+        text-align: left;
+    }
+    
+    .footer-section {
+        text-align: left;
+    }
+    
+    .footer-links {
+        align-items: flex-start;
+    }
+}
+
+@media (min-width: 1024px) {
+    .specifications-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+    
+    .tire-size-display {
+        font-size: 2.5rem;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 48px;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .form-select {
+        min-height: 48px;
+        padding: 0.875rem 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .main-header,
+    .main-footer,
+    .finder-actions,
+    .results-actions,
+    .loading-overlay {
+        display: none !important;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .results-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .btn:hover {
+        transform: none;
+    }
+    
+    .loading-spinner {
+        animation: none;
+    }
+}
