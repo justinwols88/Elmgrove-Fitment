@@ -142,18 +142,23 @@
                             </div>
                             <div class="spec-content">
                                 <div class="tire-size-display" id="primary-size">235/45R18</div>
-                                <div class="size-breakdown">
+                                <div class="size-breakdown" id="size-breakdown">
+                                    <!-- Will be populated by JavaScript -->
                                     <div class="breakdown-item">
-                                        <div class="value" id="tire-width">235</div>
-                                        <div class="label">Width (mm)</div>
+                                        <div class="value">235</div>
+                                        <div class="label">Width</div>
                                     </div>
                                     <div class="breakdown-item">
-                                        <div class="value" id="aspect-ratio">45</div>
+                                        <div class="value">45%</div>
                                         <div class="label">Aspect Ratio</div>
                                     </div>
                                     <div class="breakdown-item">
-                                        <div class="value" id="rim-diameter">18</div>
+                                        <div class="value">18"</div>
                                         <div class="label">Rim Diameter</div>
+                                    </div>
+                                    <div class="breakdown-item">
+                                        <div class="value">106mm</div>
+                                        <div class="label">Sidewall</div>
                                     </div>
                                 </div>
                             </div>
@@ -167,6 +172,10 @@
                             </div>
                             <div class="spec-content">
                                 <div class="spec-item">
+                                    <span class="label">Rim Diameter</span>
+                                    <span class="value" id="rim-diameter">18"</span>
+                                </div>
+                                <div class="spec-item">
                                     <span class="label">Rim Width</span>
                                     <span class="value" id="rim-width">9.0"</span>
                                 </div>
@@ -177,10 +186,6 @@
                                 <div class="spec-item">
                                     <span class="label">Offset</span>
                                     <span class="value" id="offset">+40mm</span>
-                                </div>
-                                <div class="spec-item">
-                                    <span class="label">Center Bore</span>
-                                    <span class="value" id="center-bore">67.1mm</span>
                                 </div>
                             </div>
                         </div>
@@ -211,6 +216,28 @@
                             </div>
                         </div>
 
+                        <!-- Additional Specs Card -->
+                        <div class="spec-card">
+                            <div class="spec-header">
+                                <i class="fas fa-ruler-combined"></i>
+                                <h4>Additional Specifications</h4>
+                            </div>
+                            <div class="spec-content">
+                                <div class="spec-item">
+                                    <span class="label">Overall Diameter</span>
+                                    <span class="value" id="overall-diameter">668mm</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Revs per Mile</span>
+                                    <span class="value" id="revs-per-mile">763</span>
+                                </div>
+                                <div class="spec-item">
+                                    <span class="label">Section Height</span>
+                                    <span class="value" id="section-height">106mm</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Alternative Sizes Card -->
                         <div class="spec-card">
                             <div class="spec-header">
@@ -218,12 +245,13 @@
                                 <h4>Alternative Sizes</h4>
                             </div>
                             <div class="spec-content">
-                                <div class="alternate-sizes-list" id="alternate-sizes">
-                                    <span class="alt-size">225/45R18</span>
-                                    <span class="alt-size">245/40R18</span>
-                                    <span class="alt-size">235/40R19</span>
-                                    <span class="alt-size">225/40R19</span>
-                                </div>
+                                <ul class="alternate-sizes-list" id="alternate-sizes">
+                                    <!-- Will be populated by JavaScript -->
+                                    <li>225/45R18</li>
+                                    <li>245/40R18</li>
+                                    <li>235/40R19</li>
+                                    <li>225/40R19</li>
+                                </ul>
                                 <p class="alternate-note">These sizes are compatible with your vehicle</p>
                             </div>
                         </div>
@@ -276,16 +304,16 @@
                     <div class="api-status-footer">
                         <div class="status-indicator online">
                             <div class="status-dot"></div>
-                            <span>Car Stockpile API: Online</span>
+                            <span>Wheel-Size.com API</span>
                         </div>
-                        <p class="status-note">Using RapidAPI for real-time vehicle data</p>
+                        <p class="status-note">Using Wheel-Size.com for real-time vehicle data</p>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Justin Wold. All rights reserved.</p>
                 <p class="footer-disclaimer">
-                    Always verify the rim sizeto confirm fitment before installing tires or wheels for your vehicle.
+                    Always verify the rim size to confirm fitment before installing tires or wheels for your vehicle.
                 </p>
             </div>
         </div>
@@ -297,7 +325,9 @@
         <p>Loading vehicle data...</p>
     </div>
 
+    <!-- Save the JavaScript code as app.js and link it here -->
     <script src="app.js"></script>
+    
     <script>
         // Helper functions for HTML
         function handleSearch() {
@@ -310,7 +340,13 @@
                 updateSteps(4);
                 // Trigger the model change handler
                 if (typeof handleModelChange === 'function') {
-                    handleModelChange();
+                    // Trigger the change event on model select
+                    const modelSelect = document.getElementById('model');
+                    if (modelSelect) {
+                        modelSelect.dispatchEvent(new Event('change'));
+                    }
+                } else {
+                    console.error('handleModelChange function not found. Make sure app.js is loaded.');
                 }
             } else {
                 alert('Please select year, make, and model');
@@ -336,6 +372,11 @@
             const vehicle = document.getElementById('vehicle-title').textContent;
             const tireSize = document.getElementById('primary-size').textContent;
             
+            if (vehicle === 'Select a Vehicle') {
+                alert('Please select a vehicle first');
+                return;
+            }
+            
             let saved = JSON.parse(localStorage.getItem('savedFitments') || '[]');
             saved.push({
                 vehicle: vehicle,
@@ -351,7 +392,13 @@
         function shareFitment() {
             const vehicle = document.getElementById('vehicle-title').textContent;
             const tireSize = document.getElementById('primary-size').textContent;
-            const text = `Tire fitment for ${vehicle}: ${tireSize} - Find yours at TireFitment.com`;
+            
+            if (vehicle === 'Select a Vehicle') {
+                alert('Please select a vehicle first');
+                return;
+            }
+            
+            const text = `Tire fitment for ${vehicle}: ${tireSize} - Find yours at Elmsgrove's Tire Fitment`;
             
             if (navigator.share) {
                 navigator.share({
@@ -378,6 +425,32 @@
             document.getElementById('model').value = model;
             handleSearch();
         }
+        
+        // Make resetSelections available globally
+        window.resetSelections = window.resetSelections || function() {
+            document.getElementById('year').value = '';
+            document.getElementById('make').value = '';
+            document.getElementById('make').disabled = true;
+            document.getElementById('make').innerHTML = '<option value="">Select Make</option>';
+            document.getElementById('model').value = '';
+            document.getElementById('model').disabled = true;
+            document.getElementById('model').innerHTML = '<option value="">Select Model</option>';
+            
+            // Hide results
+            const resultsCard = document.getElementById('results');
+            if (resultsCard) {
+                resultsCard.classList.remove('show');
+            }
+            
+            // Reset steps
+            updateSteps(0);
+            
+            // Reset vehicle info
+            document.getElementById('vehicle-title').textContent = 'Select a Vehicle';
+            document.getElementById('vehicle-subtitle').textContent = 'Choose a vehicle above to see tire specifications';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
     </script>
 </body>
 </html>
