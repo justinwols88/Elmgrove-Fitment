@@ -1,6 +1,23 @@
-// RapidAPI Configuration for Car Stockpile API
-const RAPIDAPI_KEY = 'c72277caa5mshd73fd7f2cd60c02p159ca4jsnc5a89a41bf4d';
-const RAPIDAPI_HOST = 'car-stockpile.p.rapidapi.com';
+// Wheel-Size.com API Configuration
+const WHEEL_SIZE_API_KEY = 'aacf06f99737a3a99963870c871a5eaf';
+const WHEEL_SIZE_BASE_URL = 'https://api.wheel-size.com/v2';
+
+// Helper function to build API URLs with authentication
+function buildWheelSizeAPIUrl(endpoint, params = {}) {
+    const url = new URL(`${WHEEL_SIZE_BASE_URL}${endpoint}`);
+    
+    // Add user_key as the first parameter for authentication
+    url.searchParams.append('user_key', WHEEL_SIZE_API_KEY);
+    
+    // Add additional parameters
+    Object.keys(params).forEach(key => {
+        if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+            url.searchParams.append(key, params[key]);
+        }
+    });
+    
+    return url.toString();
+}
 
 // Enhanced local tire database for fallback
 const tireDatabase = {
@@ -71,6 +88,35 @@ const tireDatabase = {
         "Traverse": { tireSize: "255/55R20", rimDiameter: 20, boltPattern: "5x115", offset: "+22mm" },
         "Malibu": { tireSize: "225/55R17", rimDiameter: 17, boltPattern: "5x115", offset: "+44mm" },
         "Corvette": { tireSize: "305/30R19", rimDiameter: 19, boltPattern: "5x120", offset: "+45mm" }
+    },
+    "Nissan": {
+        "Altima": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+45mm" },
+        "Rogue": { tireSize: "225/65R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+45mm" },
+        "Sentra": { tireSize: "205/55R16", rimDiameter: 16, boltPattern: "5x114.3", offset: "+45mm" },
+        "Maxima": { tireSize: "245/40R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+45mm" },
+        "Pathfinder": { tireSize: "255/50R20", rimDiameter: 20, boltPattern: "5x114.3", offset: "+40mm" },
+        "Frontier": { tireSize: "265/70R16", rimDiameter: 16, boltPattern: "6x114.3", offset: "+30mm" }
+    },
+    "Hyundai": {
+        "Elantra": { tireSize: "225/45R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+52mm" },
+        "Sonata": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+52mm" },
+        "Tucson": { tireSize: "235/55R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+52mm" },
+        "Santa Fe": { tireSize: "235/55R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+52mm" },
+        "Palisade": { tireSize: "245/50R20", rimDiameter: 20, boltPattern: "5x114.3", offset: "+52mm" }
+    },
+    "Kia": {
+        "Forte": { tireSize: "225/45R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+52mm" },
+        "Optima": { tireSize: "235/45R18", rimDiameter: 18, boltPattern: "5x114.3", offset: "+52mm" },
+        "Sorento": { tireSize: "235/55R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+52mm" },
+        "Telluride": { tireSize: "245/50R20", rimDiameter: 20, boltPattern: "5x114.3", offset: "+52mm" },
+        "Sportage": { tireSize: "235/55R19", rimDiameter: 19, boltPattern: "5x114.3", offset: "+52mm" }
+    },
+    "Subaru": {
+        "Impreza": { tireSize: "205/55R16", rimDiameter: 16, boltPattern: "5x100", offset: "+48mm" },
+        "Outback": { tireSize: "225/65R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+48mm" },
+        "Forester": { tireSize: "225/60R17", rimDiameter: 17, boltPattern: "5x114.3", offset: "+48mm" },
+        "Crosstrek": { tireSize: "225/60R17", rimDiameter: 17, boltPattern: "5x100", offset: "+48mm" },
+        "Ascent": { tireSize: "245/50R20", rimDiameter: 20, boltPattern: "5x114.3", offset: "+48mm" }
     }
 };
 
@@ -88,7 +134,7 @@ function getCompleteTireData(baseData) {
     const width = parseInt(match[1]);
     const aspectRatio = parseInt(match[2]);
     const rimDiameter = parseInt(match[3]);
-    const rimWidth = `${Math.round(width / 25.4)}.0"`;
+    const rimWidth = baseData.rimWidth || `${Math.round(width / 25.4)}.0"`;
     
     // Calculate additional specifications
     const sectionHeight = Math.round(width * (aspectRatio / 100));
@@ -168,10 +214,10 @@ function getElement(id) {
 
 // Initialize application
 async function initApp() {
-    console.log("Initializing Tire Fitment App");
+    console.log("Initializing Tire Fitment App with Wheel-Size.com API");
     
     // Test API connection
-    const apiConnected = await testAPI();
+    const apiConnected = await testWheelSizeAPI();
     
     // Update API status display
     const apiStatusElement = getElement('api-status');
@@ -189,23 +235,24 @@ async function initApp() {
     setupEventListeners();
 }
 
-// Test API connection
-async function testAPI() {
+// Test Wheel-Size.com API connection
+async function testWheelSizeAPI() {
     try {
-        console.log("Testing API connection...");
+        console.log("Testing Wheel-Size.com API connection...");
         
-        const response = await fetch('https://car-stockpile.p.rapidapi.com/makes?year=2024', {
+        const apiUrl = buildWheelSizeAPIUrl('/years/');
+        
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'x-rapidapi-key': RAPIDAPI_KEY,
-                'x-rapidapi-host': RAPIDAPI_HOST
+                'Accept': 'application/json',
             }
         });
         
         return response.ok;
         
     } catch (error) {
-        console.log("API test failed:", error.message);
+        console.log("Wheel-Size.com API test failed:", error.message);
         return false;
     }
 }
@@ -258,8 +305,8 @@ async function handleYearChange() {
     try {
         let makes = [];
         
-        // Try to fetch from API
-        makes = await fetchMakesFromAPI(year);
+        // Fetch from Wheel-Size.com API
+        makes = await fetchMakesFromWheelSizeAPI(year);
         
         // If API failed or returned no data, use local
         if (makes.length === 0) {
@@ -283,14 +330,15 @@ async function handleYearChange() {
     }
 }
 
-// Fetch makes from API
-async function fetchMakesFromAPI(year) {
+// Fetch makes from Wheel-Size.com API
+async function fetchMakesFromWheelSizeAPI(year) {
     try {
-        const response = await fetch(`https://car-stockpile.p.rapidapi.com/makes?year=${year}`, {
+        const apiUrl = buildWheelSizeAPIUrl('/makes/', { year: year });
+        
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'x-rapidapi-key': RAPIDAPI_KEY,
-                'x-rapidapi-host': RAPIDAPI_HOST
+                'Accept': 'application/json',
             }
         });
         
@@ -300,31 +348,22 @@ async function fetchMakesFromAPI(year) {
         
         const data = await response.json();
         
-        // Parse response based on common RapidAPI formats
-        if (Array.isArray(data)) {
-            return data.map(item => item.make || item.name || item).filter(Boolean).sort();
-        } else if (data.makes && Array.isArray(data.makes)) {
-            return data.makes.map(item => item.make || item.name || item).filter(Boolean).sort();
-        } else if (data.results && Array.isArray(data.results)) {
-            return data.results.map(item => item.make || item.name || item).filter(Boolean).sort();
+        if (data && Array.isArray(data)) {
+            return data.map(item => item.slug || item.name || item).filter(Boolean).sort();
         }
         
         return [];
         
     } catch (error) {
-        console.warn("Failed to fetch makes from API:", error.message);
+        console.warn("Failed to fetch makes from Wheel-Size.com API:", error.message);
         return [];
     }
 }
 
 // Get makes from local database
 function getLocalMakes(year) {
-    // Return common makes regardless of year for simplicity
-    const commonMakes = [
-        "Audi", "BMW", "Mercedes-Benz", "Toyota", "Honda", "Ford", "Chevrolet",
-        "Nissan", "Hyundai", "Kia", "Subaru", "Jeep", "Tesla", "Volkswagen", "Lexus", "Mazda"
-    ];
-    return commonMakes.sort();
+    // Return all makes from local database
+    return Object.keys(tireDatabase).sort();
 }
 
 // Handle make selection
@@ -348,8 +387,8 @@ async function handleMakeChange() {
     try {
         let models = [];
         
-        // Try to fetch from API
-        models = await fetchModelsFromAPI(year, make);
+        // Fetch from Wheel-Size.com API
+        models = await fetchModelsFromWheelSizeAPI(year, make);
         
         // If API failed or returned no data, use local
         if (models.length === 0) {
@@ -379,14 +418,18 @@ async function handleMakeChange() {
     }
 }
 
-// Fetch models from API
-async function fetchModelsFromAPI(year, make) {
+// Fetch models from Wheel-Size.com API
+async function fetchModelsFromWheelSizeAPI(year, make) {
     try {
-        const response = await fetch(`https://car-stockpile.p.rapidapi.com/models?make=${encodeURIComponent(make)}&year=${year}`, {
+        const apiUrl = buildWheelSizeAPIUrl('/models/', {
+            make: make,
+            year: year
+        });
+        
+        const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'x-rapidapi-key': RAPIDAPI_KEY,
-                'x-rapidapi-host': RAPIDAPI_HOST
+                'Accept': 'application/json',
             }
         });
         
@@ -396,19 +439,14 @@ async function fetchModelsFromAPI(year, make) {
         
         const data = await response.json();
         
-        // Parse response based on common RapidAPI formats
-        if (Array.isArray(data)) {
-            return data.map(item => item.model || item.name || item).filter(Boolean).sort();
-        } else if (data.models && Array.isArray(data.models)) {
-            return data.models.map(item => item.model || item.name || item).filter(Boolean).sort();
-        } else if (data.results && Array.isArray(data.results)) {
-            return data.results.map(item => item.model || item.name || item).filter(Boolean).sort();
+        if (data && Array.isArray(data)) {
+            return data.map(item => item.slug || item.name || item).filter(Boolean).sort();
         }
         
         return [];
         
     } catch (error) {
-        console.warn("Failed to fetch models from API:", error.message);
+        console.warn("Failed to fetch models from Wheel-Size.com API:", error.message);
         return [];
     }
 }
@@ -443,8 +481,11 @@ async function handleModelChange() {
     try {
         let vehicleData = null;
         
-        // Try to get from local database first (more reliable)
-        if (tireDatabase[make] && tireDatabase[make][model]) {
+        // Try to get from Wheel-Size.com API first
+        vehicleData = await fetchTireDataFromWheelSizeAPI(year, make, model);
+        
+        // If API failed, try local database
+        if (!vehicleData && tireDatabase[make] && tireDatabase[make][model]) {
             vehicleData = getCompleteTireData(tireDatabase[make][model]);
         }
         
@@ -474,6 +515,79 @@ async function handleModelChange() {
         showResults();
     } finally {
         showLoading(false);
+    }
+}
+
+// Fetch tire data from Wheel-Size.com API
+async function fetchTireDataFromWheelSizeAPI(year, make, model) {
+    try {
+        const apiUrl = buildWheelSizeAPIUrl('/search/by_model/', {
+            make: make,
+            model: model,
+            year: year
+        });
+        
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            return null;
+        }
+        
+        const data = await response.json();
+        
+        // Process Wheel-Size.com API response
+        if (data && Array.isArray(data) && data.length > 0) {
+            // Get the first trim's tire data
+            const firstTrim = data[0];
+            
+            if (firstTrim.wheels && firstTrim.wheels.length > 0) {
+                const wheel = firstTrim.wheels[0];
+                
+                // Extract tire size from the first available tire
+                let tireSize = "235/45R18";
+                let rimDiameter = 18;
+                
+                if (firstTrim.tires && firstTrim.tires.length > 0) {
+                    const tire = firstTrim.tires[0];
+                    tireSize = `${tire.width}/${tire.aspect_ratio}R${tire.rim_diameter}`;
+                    rimDiameter = tire.rim_diameter;
+                }
+                
+                // Extract bolt pattern
+                let boltPattern = "5x114.3";
+                if (wheel.bolt_pattern) {
+                    boltPattern = `${wheel.bolt_pattern.holes}x${wheel.bolt_pattern.diameter}`;
+                }
+                
+                // Extract offset
+                let offset = "+40mm";
+                if (wheel.offset) {
+                    offset = wheel.offset >= 0 ? `+${wheel.offset}mm` : `${wheel.offset}mm`;
+                }
+                
+                // Get rim width
+                const rimWidth = wheel.rim_width ? `${wheel.rim_width}"` : "8.0\"";
+                
+                return getCompleteTireData({
+                    tireSize: tireSize,
+                    rimDiameter: rimDiameter,
+                    boltPattern: boltPattern,
+                    offset: offset,
+                    rimWidth: rimWidth
+                });
+            }
+        }
+        
+        return null;
+        
+    } catch (error) {
+        console.warn("Failed to fetch tire data from Wheel-Size.com API:", error.message);
+        return null;
     }
 }
 
@@ -543,6 +657,10 @@ function displayVehicleInfo(year, make, model, data) {
             alternateSizesList.appendChild(li);
         });
     }
+    
+    // Update additional specifications
+    updateElement('overall-diameter', `${data.overallDiameter}mm`);
+    updateElement('revs-per-mile', data.revolutionsPerMile);
 }
 
 function getSpeedRatingMPH(speedRating) {
@@ -632,6 +750,9 @@ function resetSelections() {
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// Export functions for use in HTML
+window.resetSelections = resetSelections;
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', initApp);
